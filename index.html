@@ -30,40 +30,37 @@
     // PASTE YOUR GOOGLE WEB APP URL HERE
     const API_URL = "https://script.google.com/macros/s/AKfycbwsjope1juu7A7YKdZX4tqaTfddlCFQgxiHAUrW2TVNfh2BT6OLCWpVV83JrBv39Bg8/exec";
 
-    async function loadTrackerData() {
-        try {
-            const response = await fetch(API_URL);
-            const data = await response.json();
-            
-            const listElement = document.getElementById("pickup-list");
-            const totalElement = document.getElementById("grand-total");
-            
-            // Set Total
-            totalElement.innerText = data.total;
-            
-            // Clear loading text
-            listElement.innerHTML = "";
-            
-            if (data.pickups.length === 0) {
-                listElement.innerHTML = '<li class="no-data">No active pickups checked for this week.</li>';
-                return;
+        async function loadTrackerData() {
+            try {
+                const response = await fetch(API_URL);
+                const data = await response.json();
+                
+                const listElement = document.getElementById("pickup-list");
+                const totalElement = document.getElementById("grand-total");
+                
+                totalElement.innerText = data.total;
+                listElement.innerHTML = "";
+                
+                if (data.items.length === 0) {
+                    listElement.innerHTML = '<li class="no-data">No active items tracked for this week.</li>';
+                    return;
+                }
+                
+                data.items.forEach(item => {
+                    const li = document.createElement("li");
+                    // Appends a small badge if it's Food vs a Pickup
+                    const badge = item.category === "Food" ? "🍎 " : "🚗 ";
+                    li.innerHTML = `<span><strong>${badge}</strong> ${item.detail}</span> <span>$${item.price}</span>`;
+                    listElement.appendChild(li);
+                });
+                
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                document.getElementById("pickup-list").innerHTML = '<li class="no-data" style="color: red;">Failed to load data.</li>';
             }
-            
-            // Generate List Items
-            data.pickups.forEach(item => {
-                const li = document.createElement("li");
-                li.innerHTML = `<span><strong>${item.day}</strong> - ${item.type}</span> <span>$${item.price}</span>`;
-                listElement.appendChild(li);
-            });
-            
-        } catch (error) {
-            console.error("Error fetching sheet data:", error);
-            document.getElementById("pickup-list").innerHTML = '<li class="no-data" style="color: red;">Failed to load data.</li>';
         }
-    }
 
-    // Run on page load
-    loadTrackerData();
+        loadTrackerData();
 </script>
 </body>
 </html>
