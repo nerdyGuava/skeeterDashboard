@@ -176,8 +176,14 @@
                 } else if (item.detail.includes("Skeet Came")) {
                     badge = "🏠 ";
                 }
-                
-                li.innerHTML = `<span><strong>${badge}</strong> ${item.detail}</span> <span>$${item.price}</span>`;
+                                
+                li.innerHTML = `
+                    <div class="item-details">
+                        <span>${badge}</span>
+                        <span>${item.detail}</span>
+                    </div>
+                    <span class="price-tag">$${item.price}</span>
+                `;
                 listElement.appendChild(li);
             });
             
