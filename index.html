@@ -167,15 +167,17 @@
             
             data.items.forEach(item => {
                 const li = document.createElement("li");
-                const badge = item.category === "Food" ? "🍎" : "🚗";
                 
-                li.innerHTML = `
-                    <div class="item-details">
-                        <span>${badge}</span>
-                        <span>${item.detail}</span>
-                    </div>
-                    <span class="price-tag">$${item.price}</span>
-                `;
+                // Determine the badge based on category and detail type
+                let badge = "🚗 "; // Default for AM/PM Pickups
+                
+                if (item.category === "Food") {
+                    badge = "🍎 ";
+                } else if (item.detail.includes("Skeet Came")) {
+                    badge = "🏠 ";
+                }
+                
+                li.innerHTML = `<span><strong>${badge}</strong> ${item.detail}</span> <span>$${item.price}</span>`;
                 listElement.appendChild(li);
             });
             
