@@ -143,6 +143,10 @@
     <div class="total-box">
         Balance Due: $<span id="grand-total">0</span>
     </div>
+
+    <a id="venmo-button" href="#" target="_blank" style="display: none; background: #008CFF; color: white; text-align: center; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-top: 10px; box-shadow: 0 4px 10px rgba(0,140,255,0.2);">
+        Pay with Venmo
+    </a>
 </div>
 
 <script>
@@ -156,9 +160,20 @@
             
             const listElement = document.getElementById("pickup-list");
             const totalElement = document.getElementById("grand-total");
+            const venmoBtn = document.getElementById("venmo-button");
             
             totalElement.innerText = data.total;
             listElement.innerHTML = "";
+
+            const VENMO_USER = 'reeceracer'
+
+            // Update Venmo URL with the live dynamic total
+            if (data.total > 0) {
+                venmoBtn.href = `https://venmo.com/?txn=pay&recipients=${VENMO_USER}&amount=${data.total}&note=Skeet%20Pickups`;
+                venmoBtn.style.display = "block"; // Show the button if balance > 0
+            } else {
+                venmoBtn.style.display = "none";  // Hide if balance is 0
+            }
             
             if (data.items.length === 0) {
                 listElement.innerHTML = '<li class="no-data">✨ All clear! No items checked for this week.</li>';
